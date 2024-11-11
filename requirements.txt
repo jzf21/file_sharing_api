@@ -1,0 +1,8 @@
+#fastapi requirements
+fastapi==0.115.4
+uvicorn==0.32.0
+#sqlalchemy requirements
+
+#pydantic requirements
+
+
