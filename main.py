@@ -45,22 +45,21 @@ async def download_directory(folder: str):
         headers={"Content-Disposition": f"attachment; filename={folder}.zip"},
     )
 
-# @app.get("/download/{folder}/{file}")
-# async def download_file(folder: str, file: str):
+@app.get("/download/{folder}/{file}")
+async def download_file(folder: str, file: str):
 
-#     base_dir = "/path/"
-    
-#     file_path = os.path.join(base_dir, folder, file)
+    base_dir=os.getcwd()
+    file_path = os.path.join(base_dir, folder, file)
 
-#     # Check if the file exists
-#     if not os.path.isfile(file_path):
-#         return {"error": "File not found"}, 404
+    # Check if the file exists
+    if not os.path.isfile(file_path):
+        return {"error": "File not found"}, 404
 
-#     return Response(
-#         content=open(file_path, "rb").read(),
-#         media_type="application/octet-stream",
-#         headers={"Content-Disposition": f"attachment; filename={file}"},
-#     )
+    return Response(
+        content=open(file_path, "rb").read(),
+        media_type="application/octet-stream",
+        headers={"Content-Disposition": f"attachment; filename={file}"},
+    )
 
 # @app.post("/upload/{folder}/{file}")
 # async def upload_file(folder: str, file: UploadFile = File(...)):
@@ -82,4 +81,19 @@ async def download_directory(folder: str):
 #     return {"files": files}
 
 
+@app.get('/files/{folder}')
+async def get_files(folder: str):
+    base_dir = "/path/"
+    base_dir = os.getcwd()
+    dir_path = os.path.join(base_dir, folder)
+    print(base_dir)
+    files = []
+    dir_path = os.path.join(base_dir, folder)
 
+    # Check if the directory exists
+    if not os.path.isdir(dir_path):
+        return {"error": "Directory not found"}, 404
+    for root, _, filenames in os.walk(dir_path):
+        for filename in filenames:
+            files.append(os.path.relpath(os.path.join(root, filename), dir_path))
+    return { "\n".join(files)}
